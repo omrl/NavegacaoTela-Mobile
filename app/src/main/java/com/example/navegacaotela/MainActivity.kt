@@ -1,9 +1,12 @@
 package com.example.navegacaotela
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,11 +16,16 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
@@ -87,11 +95,8 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable("/Tela-final") {
-                            Tela1(
-                                nomeDaTela = "Parabéns! Você acertou!",
-                                textoBotao = "Recomeçar",
-                                mostrarBotaoVoltar = false,
-                                clickProximo = {
+                            TelaVitoria(
+                                onRecomecar = {
                                     navigationController.navigate("/Tela1") {
                                         popUpTo("/Tela1") { inclusive = true }
                                     }
@@ -140,7 +145,9 @@ fun Tela2(
     val textoDigitado = remember { mutableStateOf("") }
     
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
     ) {
@@ -184,7 +191,9 @@ fun Tela3(
     val textoDigitado = remember { mutableStateOf("") }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
     ) {
@@ -227,7 +236,9 @@ fun Tela4(
     val textoDigitado = remember { mutableStateOf("") }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
     ) {
@@ -253,6 +264,43 @@ fun Tela4(
 
         Button(onClick = clickAnterior) {
             Text("Voltar")
+        }
+    }
+}
+
+@Composable
+fun TelaVitoria(
+    onRecomecar: () -> Unit
+) {
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        val mediaPlayer = MediaPlayer.create(context, R.raw.cr_suuu)
+        mediaPlayer.start()
+        mediaPlayer.setOnCompletionListener { it.release() }
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(id = R.drawable.cr7siwww),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
+        ) {
+            Text(
+                "SIIIWWWWWW! Você acertou!",
+                fontSize = 32.sp,
+                color = androidx.compose.ui.graphics.Color.White,
+                textAlign = TextAlign.Center
+            )
+            Button(onClick = onRecomecar) {
+                Text("Recomeçar")
+            }
         }
     }
 }
